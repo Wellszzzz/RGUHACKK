@@ -11,7 +11,7 @@ export default function Home() {
   const [tabIndex, setTabIndex] = useState(1);
 
   return (
-    <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-center items-center bg-gradient-to-r from-rose-500 to-blue-500">
+    <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-center items-start bg-gradient-to-r from-rose-500 to-blue-500">
       <div className="w-full h-full md:w-[500px] relative shadow-2xl">
         <div className="bg-white text-black flex justify-between items-center p-4">
           <div>
