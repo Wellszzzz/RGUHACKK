@@ -7,6 +7,11 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        openSans: ["Open Sans", "serif"],
+        abrilFatFaceRegular: ["Abril Fatface", "serif"],
+        alphaSlabOne: ["Alfa Slab One", "serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
