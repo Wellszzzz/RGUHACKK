@@ -198,7 +198,12 @@ function UserInput() {
 }
 
 const LocationRequest = () => {
-  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [location, setLocation] = useState({
+    latitude: "57.149651",
+    longitude: "-2.099075",
+  });
+  const [animalLocationData, setAnimalLocationData] = useState([]);
+
   const [error, setError] = useState(null);
 
   const requestUserLocation = () => {
@@ -208,7 +213,7 @@ const LocationRequest = () => {
           const { latitude, longitude } = position.coords;
           const Loc = { latitude, longitude };
           setLocation(Loc);
-          getAnimalsByLocation(Loc);
+          getAnimalsByLocation(Loc, setAnimalLocationData);
           setError(null);
         },
         (error) => {
@@ -241,34 +246,52 @@ const LocationRequest = () => {
     }
   };
 
+  useEffect(() => {
+    requestUserLocation();
+    console.log(animalLocationData);
+  }, []);
+
   return (
-    <div>
-      <button onClick={requestUserLocation}>Request Location</button>
-      {location.latitude && location.longitude ? (
-        <p>
-          Latitude: {location.latitude}, Longitude: {location.longitude}
-        </p>
-      ) : (
-        <p>No location data available.</p>
-      )}
-      {error && <p>Error: {error}</p>}
+    <div className="p-2 flex justify-center items-center flex-col">
+      <div className="w-full p-2 text-center font-black text-2xl">
+        Animals around you
+      </div>
+      {animalLocationData.length > 0 &&
+        animalLocationData.map((animal, idx) => (
+          <div
+            key={idx}
+            class="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row md:max-w-xl hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+          >
+            <div
+              className="bg-cover h-40 w-[20rem]"
+              style={{
+                backgroundImage: `url("${animal.image}")`,
+              }}
+            ></div>
+            {/* <img
+              class="rounded-t-lg h-40 md:rounded-none md:rounded-s-lg"
+              width="50%"
+              src={animal.image}
+              alt=""
+            /> */}
+            <div class="flex flex-col justify-between p-4 leading-normal">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                {animal.name}
+              </h5>
+              <p class="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                {animal.country}
+              </p>
+            </div>
+          </div>
+        ))}
     </div>
   );
 };
 
-// async function getAnimalsByLocation({ latitude, longitude }) {
-//   const url = `https://api.gbif.org/v1/occurrence/search?decimalLatitude=${latitude}&decimalLongitude=${longitude}&limit=10`;
-
-//   try {
-//     let response = await fetch(url);
-//     let data = await response.json();
-//     console.log("Location", data.results); // Display species found in the area
-//   } catch (error) {
-//     console.error("Error fetching data:", error);
-//   }
-// }
-
-async function getAnimalsByLocation({ latitude, longitude }) {
+async function getAnimalsByLocation(
+  { latitude, longitude },
+  setAnimalLocationData
+) {
   let lat = latitude;
   let lon = longitude;
   let radius = 0.1; // Approx. 11 km (Adjustable)
@@ -292,12 +315,20 @@ async function getAnimalsByLocation({ latitude, longitude }) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    let data = await response.json();
+    const output = [];
+    const data = await response.json();
 
-    console.log("location animals", data);
-    if (!data.results || data.results.length === 0) {
-      return;
-    }
+    console.log(data);
+    data.results.forEach((value) => {
+      output.push({
+        name: value.genericName,
+        image: value.media[0].identifier,
+        country: value.country,
+      });
+    });
+
+    setAnimalLocationData(output);
+    console.log(output);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
