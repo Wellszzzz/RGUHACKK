@@ -21,7 +21,7 @@ export default function Home() {
         </div>
         {tabIndex === 1 ? <Objectives /> : null}
         {tabIndex === 2 ? <UserInput /> : null}
-        {tabIndex === 3 ? <Objectives /> : null}
+        {tabIndex === 3 ? <LocationRequest /> : null}
       </div>
       <BottomNavBar tabIndex={tabIndex} setTabIndex={setTabIndex} />
     </div>
@@ -48,9 +48,17 @@ function Objectives() {
     <>
       <div className="flex flex-col p-3 gap-y-3 bg-sky-500 h-full w-full">
         {objectives.map((value, index) => (
-          <div key={index} className="p-5 bg-white text-black rounded-lg">
-            <div>{value.title}</div>
-            <div>{value.description}</div>
+          <div key={index} className="p-5 bg-white text-black rounded-lg ">
+            <img
+              width="32"
+              height="32"
+              src="https://img.icons8.com/external-yogi-aprelliyanto-flat-yogi-aprelliyanto/32/external-target-design-thinking-yogi-aprelliyanto-flat-yogi-aprelliyanto.png"
+              alt="external-target-design-thinking-yogi-aprelliyanto-flat-yogi-aprelliyanto"
+            />
+            <div>
+              <div>{value.title}</div>
+              <div>{value.description}</div>
+            </div>
           </div>
         ))}
       </div>
@@ -187,4 +195,110 @@ function UserInput() {
       </button>
     </form>
   );
+}
+
+const LocationRequest = () => {
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [error, setError] = useState(null);
+
+  const requestUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const Loc = { latitude, longitude };
+          setLocation(Loc);
+          getAnimalsByLocation(Loc);
+          setError(null);
+        },
+        (error) => {
+          console.error(`Error occurred: ${error.message}`);
+          setError(error.message);
+
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              console.error("User denied the request for Geolocation.");
+              setError("User denied the request for Geolocation.");
+              break;
+            case error.POSITION_UNAVAILABLE:
+              console.error("Location information is unavailable.");
+              setError("Location information is unavailable.");
+              break;
+            case error.TIMEOUT:
+              console.error("The request to get user location timed out.");
+              setError("The request to get user location timed out.");
+              break;
+            case error.UNKNOWN_ERROR:
+              console.error("An unknown error occurred.");
+              setError("An unknown error occurred.");
+              break;
+          }
+        }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+      setError("Geolocation is not supported by this browser.");
+    }
+  };
+
+  return (
+    <div>
+      <button onClick={requestUserLocation}>Request Location</button>
+      {location.latitude && location.longitude ? (
+        <p>
+          Latitude: {location.latitude}, Longitude: {location.longitude}
+        </p>
+      ) : (
+        <p>No location data available.</p>
+      )}
+      {error && <p>Error: {error}</p>}
+    </div>
+  );
+};
+
+// async function getAnimalsByLocation({ latitude, longitude }) {
+//   const url = `https://api.gbif.org/v1/occurrence/search?decimalLatitude=${latitude}&decimalLongitude=${longitude}&limit=10`;
+
+//   try {
+//     let response = await fetch(url);
+//     let data = await response.json();
+//     console.log("Location", data.results); // Display species found in the area
+//   } catch (error) {
+//     console.error("Error fetching data:", error);
+//   }
+// }
+
+async function getAnimalsByLocation({ latitude, longitude }) {
+  let lat = latitude;
+  let lon = longitude;
+  let radius = 0.1; // Approx. 11 km (Adjustable)
+
+  if (!lat || !lon) {
+    alert("Please enter valid latitude and longitude");
+    return;
+  }
+
+  // Define bounding box (simulated radius search)
+  let minLat = lat - radius;
+  let maxLat = lat + radius;
+  let minLon = lon - radius;
+  let maxLon = lon + radius;
+
+  let url = `https://api.gbif.org/v1/occurrence/search?decimalLatitude=${minLat},${maxLat}&decimalLongitude=${minLon},${maxLon}&limit=10`;
+
+  try {
+    let response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    let data = await response.json();
+
+    console.log("location animals", data);
+    if (!data.results || data.results.length === 0) {
+      return;
+    }
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
 }
