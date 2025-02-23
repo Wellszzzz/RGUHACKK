@@ -89,7 +89,7 @@ function Objectives() {
             <div
               onClick={() => setCurrentObjective({ ...objective })}
               key={idx}
-              className="flex items-center p-3 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 bg-gray-800"
+              className="flex items-center p-3 rounded-lg shadow-sm flex-row w-full bg-gray-800"
             >
               <img
                 width="70"
@@ -123,7 +123,7 @@ function ObjectiveSubComponent(objective) {
   if (!objective) return <></>;
   return (
     <>
-      <div className="flex items-center rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 bg-gray-800">
+      <div className="flex items-center rounded-lg shadow-sm flex-row w-full bg-gray-800">
         <div className="flex flex-col justify-between p-4 leading-normal">
           <h5 className="mb-2 text-2xl font-bold center tracking-tight text-white">
             {objective.apiData.title}
@@ -195,21 +195,21 @@ function BottomNavBar({ tabIndex, setTabIndex }) {
         <button
           onClick={() => setTabIndex(1)}
           type="button"
-          className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
+          className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-s-lg focus:z-10 focus:ring-2 "
         >
           Home
         </button>
         <button
           onClick={() => setTabIndex(2)}
           type="button"
-          className="px-5 py-4 text-sm font-medium text-black bg-white border-t border-b border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
+          className="px-5 py-4 text-sm font-medium text-black bg-white border-t border-b border-gray-200 focus:z-10 focus:ring-2 "
         >
           Upload
         </button>
         <button
           onClick={() => setTabIndex(3)}
           type="button"
-          className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
+          className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-e-lg focus:z-10 focus:ring-2 "
         >
           Hub
         </button>
@@ -337,7 +337,7 @@ function UserInput() {
         </div>
         {apiData ? (
           <>
-            <div className="flex items-center border border-gray-200 rounded-lg shadow-sm flex-row w-full bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex items-center border border-gray-200 rounded-lg shadow-sm flex-row w-full bg-gray-800">
               <div className="flex flex-col justify-between p-4 leading-normal">
                 <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
                   {apiData[0]?.name}
@@ -355,7 +355,7 @@ function UserInput() {
             </div>
           </>
         ) : (
-          <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+          <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full ">
             <div className="flex flex-col justify-between p-4 leading-normal">
               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 Loading
