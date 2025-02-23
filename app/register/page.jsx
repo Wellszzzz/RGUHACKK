@@ -11,7 +11,7 @@ export default function Home() {
             <div>
               <img src="./pawprint.png" alt="logo" width={50} height={50} />
             </div>
-            <span className="text-lg">Login</span>
+            <span className="text-lg">Register</span>
           </div>
           <LoginComponent />
         </div>
@@ -25,7 +25,7 @@ function LoginComponent() {
     <div className="flex flex-col p-3 gap-y-3 h-full w-full">
       <form className=" flex flex-col p-3 gap-y-3 h-full w-full">
         <div className="w-full p-2 text-center font-black text-3xl text-white">
-          Login
+          Register
         </div>
         <input
           type="text"
