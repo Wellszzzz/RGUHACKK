@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 export default function Home() {
@@ -31,9 +32,9 @@ export default function Home() {
       <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-start items-center bg-gradient-to-r from-rose-500 to-blue-500">
         <div className="w-full h-full md:w-[500px] relative shadow-2xl">
           <div className="bg-white text-black flex justify-between items-center p-5 rounded-t-lg ">
-            <div>
+            <Link href="/" className="cursor-pointer">
               <img src="./pawprint.png" alt="logo" width={50} height={50} />
-            </div>
+            </Link>
             <span className="text-lg">Account</span>
           </div>
           {tabIndex === 1 ? <Objectives /> : null}
@@ -88,7 +89,7 @@ function Objectives() {
             <div
               onClick={() => setCurrentObjective({ ...objective })}
               key={idx}
-              className="flex items-center p-3 bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+              className="flex items-center p-3 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 bg-gray-800"
             >
               <img
                 width="70"
@@ -97,10 +98,10 @@ function Objectives() {
                 alt="external-target-business-model-canvas-wanicon-two-tone-wanicon"
               />
               <div className="flex flex-col justify-between leading-normal">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
                   {objective.title}
                 </h5>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                <p className="mb-3 font-normal text-gray-400">
                   {objective.description}
                 </p>
               </div>
@@ -122,12 +123,12 @@ function ObjectiveSubComponent(objective) {
   if (!objective) return <></>;
   return (
     <>
-      <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+      <div className="flex items-center rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 bg-gray-800">
         <div className="flex flex-col justify-between p-4 leading-normal">
-          <h5 className="mb-2 text-2xl font-bold center tracking-tight text-gray-900 dark:text-white">
+          <h5 className="mb-2 text-2xl font-bold center tracking-tight text-white">
             {objective.apiData.title}
           </h5>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+          <p className="mb-3 font-normal text-gray-400">
             {objective.apiData.description}
           </p>
           <p className="mb-3 font-normal text-center text-white">Progress</p>
@@ -196,7 +197,7 @@ function BottomNavBar({ tabIndex, setTabIndex }) {
           type="button"
           className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
         >
-          Home{" "}
+          Home
         </button>
         <button
           onClick={() => setTabIndex(2)}
@@ -219,9 +220,11 @@ function BottomNavBar({ tabIndex, setTabIndex }) {
 
 function UserInput() {
   const [file, setFile] = useState(null);
-  const dialogRef = useRef(null);
   const [animalName, setAnimalName] = useState("");
   const [apiData, setApiData] = useState(null);
+  const dialogRef = useRef(null);
+  const dateRef = useRef(null);
+  const locationRef = useRef(null);
 
   const handleImageUpload = (event) => {
     const selectedFile = event.target.files[0];
@@ -231,6 +234,12 @@ function UserInput() {
   };
 
   const handleSubmit = async (file) => {
+    if (dateRef) {
+      dateRef.current.value = "";
+    }
+    if (locationRef) {
+      locationRef.current.value = "";
+    }
     if (file) {
       try {
         const reader = new FileReader();
@@ -328,19 +337,19 @@ function UserInput() {
         </div>
         {apiData ? (
           <>
-            <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex items-center border border-gray-200 rounded-lg shadow-sm flex-row w-full bg-gray-800 dark:hover:bg-gray-700">
               <div className="flex flex-col justify-between p-4 leading-normal">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-                  {apiData[0].name}
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
+                  {apiData[0]?.name}
                 </h5>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                  {apiData[0].taxonomy.scientific_name}
+                <p className="mb-3 font-normal text-gray-400">
+                  {apiData[0]?.taxonomy?.scientific_name}
                 </p>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                  {apiData[0].characteristics.habitat}
+                <p className="mb-3 font-normal text-gray-400">
+                  {apiData[0]?.characteristics?.habitat}
                 </p>
-                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                  {apiData[0].characteristics.top_speed}
+                <p className="mb-3 font-normal text-gray-400">
+                  {apiData[0]?.characteristics?.top_speed}
                 </p>
               </div>
             </div>
@@ -363,11 +372,13 @@ function UserInput() {
           Animals Log
         </div>
         <input
+          ref={locationRef}
           type="text"
           className="bg-gray-100 border border-gray-300 px-3 py-4 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Location"
         />
         <input
+          ref={dateRef}
           type="text"
           className="bg-gray-100 border border-gray-300 px-3 py-4 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-400 dark:focus:ring-blue-500 dark:focus:border-blue-500"
           placeholder="Date(dd/mm/year)"
@@ -505,21 +516,19 @@ const LocationRequest = () => {
         animalLocationData.map((animal, idx) => (
           <div
             key={idx}
-            className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
+            className="flex items-center overflow-hidden mb-1 rounded-lg shadow-sm flex-row w-full bg-gray-800 text-white"
           >
             <div
-              className="bg-cover h-40 w-[20rem]"
+              className="bg-cover h-[11rem] w-[20rem]"
               style={{
                 backgroundImage: `url("${animal.image}")`,
               }}
             ></div>
-            <div className="flex flex-col justify-between p-4 leading-normal">
-              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <div className="flex flex-col justify-between px-3 py-1 leading-normal">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-white">
                 {animal.name}
               </h5>
-              <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
-                {animal.country}
-              </p>
+              <p className="mb-2 font-normal text-gray-400">{animal.country}</p>
               <div className="w-full flex justify-between items-center font-normal text-black">
                 <div
                   className="py-1 px-3 rounded-md text-gray-200"

@@ -4,10 +4,13 @@ export default function page() {
   return (
     <div className="min-h-screen p-2 bg-gradient-to-r from-rose-500 to-blue-500">
       <div className="text-white flex justify-between items-center px-6 mb-5">
-        <div className="p-6 flex justify-center items-center gap-x-2 text-xl">
+        <Link
+          href={"/"}
+          className="p-6 flex justify-center items-center gap-x-2 text-xl cursor-pointer"
+        >
           <img src="./pawprint.png" alt="logo" width={40} height={40} />
           <span className="font-black">Animal Verse</span>
-        </div>
+        </Link>
         <div className="inline-flex rounded-md shadow-xs" role="group">
           <Link
             href={"/login"}

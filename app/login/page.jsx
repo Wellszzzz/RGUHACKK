@@ -8,9 +8,9 @@ export default function Home() {
       <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-start items-center bg-gradient-to-r from-rose-500 to-blue-500">
         <div className="w-full h-full md:w-[500px] relative shadow-2xl">
           <div className="bg-white text-black flex justify-between items-center p-5 rounded-t-lg ">
-            <div>
+            <Link href="/" className="cursor-pointer">
               <img src="./pawprint.png" alt="logo" width={50} height={50} />
-            </div>
+            </Link>
             <span className="text-lg">Login</span>
           </div>
           <LoginComponent />
