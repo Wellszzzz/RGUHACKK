@@ -31,7 +31,7 @@ export default function page() {
           <p className="font-normal text-white text-lg md:text-xl text-center md:text-left">
             Our AI-powered platform transforms your <strong>wildlife</strong>{" "}
             observations into real-time data that helps scientist and
-            convevationist track species, identify threats, and safeguard
+            conservationist track species, identify threats, and safeguard
             biodiversity
           </p>
           <Link
