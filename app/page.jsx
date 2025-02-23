@@ -1,14 +1,15 @@
 "use client";
 
-import { Content } from "next/font/google";
 import { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast, Bounce } from "react-toastify";
 export default function Home() {
   useEffect(() => {
+    const notification =
+      "Exciting news! A rare Sturnus has been spotted in your area. Time to track it down and document your find!";
     const notify = () =>
-      toast("Wow so easy!", {
+      toast(notification, {
         position: "top-center",
-        autoClose: 5000,
+        autoClose: 10000,
         hideProgressBar: false,
         closeOnClick: false,
         pauseOnHover: true,
@@ -29,11 +30,11 @@ export default function Home() {
       <ToastContainer />
       <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-start items-center bg-gradient-to-r from-rose-500 to-blue-500">
         <div className="w-full h-full md:w-[500px] relative shadow-2xl">
-          <div className="bg-white text-black flex justify-between items-center p-4">
+          <div className="bg-white text-black flex justify-between items-center p-5 rounded-t-lg ">
             <div>
-              <img src="./pawprint.png" alt="logo" />
+              <img src="./pawprint.png" alt="logo" width={50} height={50} />
             </div>
-            <div>Account</div>
+            <span className="text-lg">Account</span>
           </div>
           {tabIndex === 1 ? <Objectives /> : null}
           {tabIndex === 2 ? <UserInput /> : null}
@@ -218,7 +219,7 @@ function UserInput() {
     <>
       <dialog
         ref={dialogRef}
-        className="bg-white p-3 rounded-lg shadow-lg h-fit w-full"
+        className="bg-white p-3 rounded-lg shadow-lg h-fit w-full md:w-[500px]"
       >
         <div className="flex justify-between gap-x-10 w-[90%] mx-auto items-center p-2">
           <h1 className="text-lg font-bold">
