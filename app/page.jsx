@@ -9,18 +9,18 @@ export default function page() {
           <span className="font-black">Animal Verse</span>
         </div>
         <div className="inline-flex rounded-md shadow-xs" role="group">
-          <button
-            type="button"
+          <Link
+            href={"/login"}
             className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-s-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
           >
             Login
-          </button>
-          <button
-            type="button"
+          </Link>
+          <Link
+            href={"/register"}
             className="px-5 py-4 text-sm font-medium text-black bg-white border border-gray-200 rounded-e-lg hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 "
           >
             Signup
-          </button>
+          </Link>
         </div>
       </div>
       <div className="bg-gray-800 w-[95%] min-h-[550px] mx-auto rounded-2xl grid md:grid-row-1 md:grid-cols-2 grid-cols-1 grid-row-2 overflow-hidden">
