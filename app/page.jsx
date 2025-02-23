@@ -2,29 +2,46 @@
 
 import { Content } from "next/font/google";
 import { useEffect, useState, useRef } from "react";
-
+import { ToastContainer, toast, Bounce } from "react-toastify";
 export default function Home() {
-  // useEffect(() => {
-  //   processImage();
-  // }, []);
+  useEffect(() => {
+    const notify = () =>
+      toast("Wow so easy!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        transition: Bounce,
+      });
+    setTimeout(() => {
+      notify();
+    }, 5000);
+  }, []);
 
   const [tabIndex, setTabIndex] = useState(1);
 
   return (
-    <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-center items-start bg-gradient-to-r from-rose-500 to-blue-500">
-      <div className="w-full h-full md:w-[500px] relative shadow-2xl">
-        <div className="bg-white text-black flex justify-between items-center p-4">
-          <div>
-            <img src="./pawprint.png" alt="logo" />
+    <>
+      <ToastContainer />
+      <div className="font-openSans w-screen min-h-screen p-2 flex flex-col justify-start items-center bg-gradient-to-r from-rose-500 to-blue-500">
+        <div className="w-full h-full md:w-[500px] relative shadow-2xl">
+          <div className="bg-white text-black flex justify-between items-center p-4">
+            <div>
+              <img src="./pawprint.png" alt="logo" />
+            </div>
+            <div>Account</div>
           </div>
-          <div>Account</div>
+          {tabIndex === 1 ? <Objectives /> : null}
+          {tabIndex === 2 ? <UserInput /> : null}
+          {tabIndex === 3 ? <LocationRequest /> : null}
         </div>
-        {tabIndex === 1 ? <Objectives /> : null}
-        {tabIndex === 2 ? <UserInput /> : null}
-        {tabIndex === 3 ? <LocationRequest /> : null}
+        <BottomNavBar tabIndex={tabIndex} setTabIndex={setTabIndex} />
       </div>
-      <BottomNavBar tabIndex={tabIndex} setTabIndex={setTabIndex} />
-    </div>
+    </>
   );
 }
 
@@ -118,8 +135,6 @@ function UserInput() {
     if (selectedFile) {
       setFile(selectedFile);
     }
-
-    handleSubmit(selectedFile);
   };
 
   const handleSubmit = async (file) => {
@@ -159,10 +174,10 @@ function UserInput() {
         };
         reader.readAsDataURL(file);
       } catch (error) {
-        console.error("Error uploading image:", error);
+        console.log("Error uploading image:", error);
       }
     } else {
-      console.error("No file selected.");
+      console.log("No file selected.");
     }
   };
 
@@ -203,31 +218,52 @@ function UserInput() {
     <>
       <dialog
         ref={dialogRef}
-        className="bg-white p-6 rounded-lg shadow-lg h-[600] w-full"
+        className="bg-white p-3 rounded-lg shadow-lg h-fit w-full"
       >
-        <h1 className="text-xl font-bold mb-4">
-          {!animalName ? "Loading..." : animalName}
-        </h1>
+        <div className="flex justify-between gap-x-10 w-[90%] mx-auto items-center p-2">
+          <h1 className="text-lg font-bold">
+            {!animalName ? "Loading..." : animalName}
+          </h1>
+          <button className="" onClick={hideDialog}>
+            <img
+              width="20"
+              height="20"
+              src="https://img.icons8.com/ios-glyphs/30/737373/delete-sign.png"
+              alt="delete-sign"
+            />
+          </button>
+        </div>
         {apiData ? (
-          <div>
-            <h1>{apiData[0].name}</h1>
-            <p>Scientific Name: {apiData[0].taxonomy.scientific_name}</p>
-            <p>Habitat: {apiData[0].characteristics.habitat}</p>
-            <p>Top Speed: {apiData[0].characteristics.top_speed}</p>
-          </div>
+          <>
+            <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+              <div className="flex flex-col justify-between p-4 leading-normal">
+                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                  {apiData[0].name}
+                </h5>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                  {apiData[0].taxonomy.scientific_name}
+                </p>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                  {apiData[0].characteristics.habitat}
+                </p>
+                <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                  {apiData[0].characteristics.top_speed}
+                </p>
+              </div>
+            </div>
+          </>
         ) : (
-          <div>Loading...</div>
+          <div className="flex items-center bg-white border border-gray-200 rounded-lg shadow-sm flex-row w-full hover:bg-gray-100 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <div className="flex flex-col justify-between p-4 leading-normal">
+              <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Loading
+              </h5>
+              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+                Loading...
+              </p>
+            </div>
+          </div>
         )}
-        <p className="mb-4">Some interesting information goes here.</p>
-        <button className="bg-green-500 text-white px-4 py-2 rounded mb-4">
-          Inside Button
-        </button>
-        <button
-          className="bg-red-500 text-white px-4 py-2 rounded"
-          onClick={hideDialog}
-        >
-          Close Dialog
-        </button>
       </dialog>
       <form className=" flex flex-col p-3 gap-y-3 bg-sky-500 h-full w-full">
         <div className="w-full p-2 text-center font-black text-2xl">
@@ -280,7 +316,7 @@ function UserInput() {
           </div>
         </div>
         <button
-          onClick={() => handleSubmit()}
+          onClick={() => handleSubmit(file)}
           type="button"
           className="text-white text-base bg-gradient-to-br py-3 from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg px-5 text-center me-2 mb-2"
         >
@@ -342,8 +378,28 @@ const LocationRequest = () => {
 
   useEffect(() => {
     requestUserLocation();
-    console.log(animalLocationData);
   }, []);
+
+  const getColor = (count) => {
+    console.log(count);
+    if (count > 10) {
+      return "#16C47F"; // Common
+    } else if (count > 5) {
+      return "#FFB200"; // Rare
+    } else {
+      return "#D91656"; // Something else
+    }
+  };
+
+  const getState = (count) => {
+    if (count > 10) {
+      return "Common"; // Common
+    } else if (count > 5) {
+      return "Occational"; // Rare
+    } else {
+      return "Rare"; // Something else
+    }
+  };
 
   return (
     <div className="p-2 flex justify-center items-center flex-col">
@@ -368,9 +424,19 @@ const LocationRequest = () => {
               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
                 {animal.name}
               </h5>
-              <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
+              <p className="mb-2 font-normal text-gray-700 dark:text-gray-400">
                 {animal.country}
               </p>
+              <div className="w-full flex justify-between items-center font-normal text-black">
+                <div
+                  className="py-1 px-3 rounded-md text-gray-200"
+                  style={{
+                    backgroundColor: getColor(animal.count),
+                  }}
+                >
+                  {getState(animal.count)}
+                </div>
+              </div>
             </div>
           </div>
         ))
@@ -398,7 +464,7 @@ async function getAnimalsByLocation(
   let minLon = lon - radius;
   let maxLon = lon + radius;
 
-  let url = `https://api.gbif.org/v1/occurrence/search?decimalLatitude=${minLat},${maxLat}&decimalLongitude=${minLon},${maxLon}&limit=10`;
+  let url = `https://api.gbif.org/v1/occurrence/search?decimalLatitude=${minLat},${maxLat}&decimalLongitude=${minLon},${maxLon}&limit=2000`;
 
   try {
     let response = await fetch(url);
@@ -406,15 +472,26 @@ async function getAnimalsByLocation(
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
+    const map = new Map();
     const output = [];
     const data = await response.json();
 
     data.results.forEach((value) => {
-      output.push({
-        name: value.genericName,
-        image: value.media[0].identifier,
-        country: value.country,
-      });
+      const key = `${value.genericName}`;
+
+      if (!map.has(key)) {
+        const obj = {
+          count: 1, // Set initial count to 1
+          name: value.genericName,
+          image: value.media[0].identifier,
+          country: value.country,
+        };
+        map.set(key, obj);
+        output.push(obj);
+      } else {
+        const item = map.get(key);
+        item.count += 1; // Increment count directly in the item
+      }
     });
 
     setAnimalLocationData(output);
