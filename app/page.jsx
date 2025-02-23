@@ -23,7 +23,7 @@ export default function page() {
           </button>
         </div>
       </div>
-      <div className="bg-gray-900 w-[95%] min-h-[550px] mx-auto rounded-2xl grid md:grid-row-1 md:grid-cols-2 grid-cols-1 grid-row-2 overflow-hidden">
+      <div className="bg-gray-800 w-[95%] min-h-[550px] mx-auto rounded-2xl grid md:grid-row-1 md:grid-cols-2 grid-cols-1 grid-row-2 overflow-hidden">
         <div className="flex flex-col justify-start md:justify-center items-start p-10 leading-normal gap-y-5">
           <h5 className="mb-2 text-4xl md:text-5xl font-black tracking-tight text-white text-center md:text-left">
             Capture. Analyze. Protect
